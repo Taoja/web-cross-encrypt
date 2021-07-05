@@ -3,6 +3,7 @@ package main
 import (
 	cRand "crypto/rand"
 	"encoding/base64"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"github.com/tjfoc/gmsm/sm2"
@@ -84,7 +85,11 @@ func initRandomKey() []byte {
 
 // 使用sm2加密sm4秘钥
 func encryptKey(key []byte) (string, error) {
-	pub := sm2.Decompress([]byte("黄武韬太帅了"))
+	pubByte, err1 := hex.DecodeString("041bf86ecf5d8699d2")
+	if err1 != nil {
+		return "", err1
+	}
+	pub := sm2.Decompress(pubByte)
 	enc, err := pub.EncryptAsn1(key,cRand.Reader) //sm2加密
 	if err != nil {
 		return "", err
